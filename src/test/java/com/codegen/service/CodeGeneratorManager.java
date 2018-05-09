@@ -255,7 +255,9 @@ public class CodeGeneratorManager extends CodeGeneratorConfig {
 	 * @return
 	 */
 	private static String packageConvertPath(String packageName) {
-		return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
+        System.out.println(packageName);
+
+        return String.format("/%s/", packageName.contains(".") ? packageName.replaceAll("\\.", "/") : packageName);
 	}
 	
 	/**
@@ -279,7 +281,10 @@ public class CodeGeneratorManager extends CodeGeneratorConfig {
 		SERVICE_PACKAGE = prop.getProperty("service.package");
 		SERVICE_IMPL_PACKAGE = prop.getProperty("service.impl.package");
 		CONTROLLER_PACKAGE = prop.getProperty("controller.package");
-		
+		CONTROLLER_PACKAGE = prop.getProperty("controller.package");
+        PACK_TYPE = "".equals(prop.getProperty("pack.type")) ? 0 : Integer.parseInt(prop.getProperty("pack.type"));
+        MAPPER_TYPE = "".equals(prop.getProperty("mapper.type")) ? "ANNOTATEDMAPPER" : prop.getProperty("mapper.type");
+
 		MAPPER_INTERFACE_REFERENCE = prop.getProperty("mapper.interface.reference");
 		SERVICE_INTERFACE_REFERENCE = prop.getProperty("service.interface.reference");
 		ABSTRACT_SERVICE_CLASS_REFERENCE = prop.getProperty("abstract.service.class.reference");

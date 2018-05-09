@@ -3,6 +3,8 @@ package com.codegen.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.codegen.service.CodeGeneratorConfig;
+import com.codegen.util.Utils;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.config.Configuration;
 import org.mybatis.generator.config.Context;
@@ -40,9 +42,13 @@ public class ModelAndMapperGenerator extends CodeGeneratorManager implements Cod
 			throw new RuntimeException("Model 和  Mapper 生成失败!", e);
 		}
 		
-		if (generator == null || generator.getGeneratedJavaFiles().isEmpty() || generator.getGeneratedXmlFiles().isEmpty()) {
+		if (generator == null || generator.getGeneratedJavaFiles().isEmpty() ) {
 			throw new RuntimeException("Model 和  Mapper 生成失败, warnings: " + warnings);
 		}
+
+		if (generator.getGeneratedXmlFiles().isEmpty() && "XMLMAPPER".equals(CodeGeneratorConfig.MAPPER_TYPE)){
+            throw new RuntimeException("Model 和  Mapper 生成失败, warnings: " + warnings);
+        }
 		
 		if (StringUtils.isNullOrEmpty(modelName)) {
 			modelName = tableNameConvertUpperCamel(tableName);
@@ -61,17 +67,19 @@ public class ModelAndMapperGenerator extends CodeGeneratorManager implements Cod
 	 */
 	private Context initConfig(String tableName, String modelName, String sign) {
 		Context context = null;
-		try {
+        String customMapping = Utils.getEndWithPack(sign);
+
+        try {
 			context = initMybatisGeneratorContext(sign);
 			JavaModelGeneratorConfiguration javaModelGeneratorConfiguration = new JavaModelGeneratorConfiguration();
 	        javaModelGeneratorConfiguration.setTargetProject(PROJECT_PATH + JAVA_PATH);
-	        javaModelGeneratorConfiguration.setTargetPackage(MODEL_PACKAGE + "." + sign);
+	        javaModelGeneratorConfiguration.setTargetPackage(MODEL_PACKAGE + "." + customMapping);
 	        context.setJavaModelGeneratorConfiguration(javaModelGeneratorConfiguration);
 	        
 	        JavaClientGeneratorConfiguration javaClientGeneratorConfiguration = new JavaClientGeneratorConfiguration();
 	        javaClientGeneratorConfiguration.setTargetProject(PROJECT_PATH + JAVA_PATH);
-	        javaClientGeneratorConfiguration.setTargetPackage(MAPPER_PACKAGE + "." + sign);
-	        javaClientGeneratorConfiguration.setConfigurationType("XMLMAPPER");
+	        javaClientGeneratorConfiguration.setTargetPackage(MAPPER_PACKAGE + "." + customMapping);
+	        javaClientGeneratorConfiguration.setConfigurationType(CodeGeneratorConfig.MAPPER_TYPE);
 	        context.setJavaClientGeneratorConfiguration(javaClientGeneratorConfiguration);
 	        
 	        TableConfiguration tableConfiguration = new TableConfiguration(context);

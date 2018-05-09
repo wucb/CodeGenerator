@@ -8,6 +8,7 @@ import java.util.Map;
 import com.codegen.service.CodeGenerator;
 import com.codegen.service.CodeGeneratorManager;
 import com.codegen.util.StringUtils;
+import com.codegen.util.Utils;
 import com.google.common.base.CaseFormat;
 
 import freemarker.template.Configuration;
@@ -20,7 +21,7 @@ public class ControllerGenerator extends CodeGeneratorManager implements CodeGen
 	@Override
 	public void genCode(String tableName, String modelName, String sign) {
 		Configuration cfg = getFreemarkerConfiguration();
-		String customMapping = "/" + sign + "/";
+		String customMapping = Utils.getEndWithPack(sign);
 		String modelNameUpperCamel = StringUtils.isNullOrEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
 		
 		Map<String, Object> data = getDataMapInit(tableName, modelName, sign, modelNameUpperCamel); 

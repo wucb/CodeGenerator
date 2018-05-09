@@ -32,7 +32,12 @@ public class CodeGeneratorConfig {
 	protected static String SERVICE_IMPL_PACKAGE;
 	// 项目 Controller 所在包
 	protected static String CONTROLLER_PACKAGE;
-	
+	// 项目 包构建方式
+	public static int PACK_TYPE;
+
+	//mapper生成方式 注解 xml
+	public static String  MAPPER_TYPE;
+
 	// 生成的 Service 存放路径
 	protected static String PACKAGE_PATH_SERVICE;
 	// 生成的 Service 实现存放路径

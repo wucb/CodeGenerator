@@ -9,6 +9,7 @@ import com.codegen.service.CodeGenerator;
 import com.codegen.service.CodeGeneratorManager;
 import com.codegen.util.StringUtils;
 
+import com.codegen.util.Utils;
 import freemarker.template.Configuration;
 /**
  * Service层 代码生成器
@@ -19,7 +20,7 @@ public class ServiceGenerator extends CodeGeneratorManager implements CodeGenera
 	@Override
 	public void genCode(String tableName, String modelName, String sign) {
 		Configuration cfg = getFreemarkerConfiguration();
-		String customMapping = "/" + sign + "/";
+		String customMapping = Utils.getEndWithPack(sign);
 		String modelNameUpperCamel = StringUtils.isNullOrEmpty(modelName) ? tableNameConvertUpperCamel(tableName) : modelName;
 		
 		Map<String, Object> data = getDataMapInit(modelName, sign, modelNameUpperCamel);
